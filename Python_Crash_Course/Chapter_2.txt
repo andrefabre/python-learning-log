@@ -1,0 +1,22 @@
+
+Traceback: a traceback is a record of where the interpreter ran into trouble when trying to execute code.
+ Method: an action that python can perform on a piece of data
+
+ .title() - changes each word to title case where each word begins with a capital letter
+ .lower() - changes each word to lowercase
+ .upper() - changes each word to uppercase
+
+ f strings: the f is for format, python formats the string by replacing the name of any variable in braces with its value
+
+ to add a tab to text: \t for example print("\tPython")
+ new line operator: \n
+
+ Removing whitespace:
+    .rstrip() - remove whitespace at the right end of a string
+    .lstrip() - remove whitespace at the left end of a string
+    .strip() - remove whitespace from both ends of a string
+
+NUMBERS:
+
+Underscores in numbers - you can group digits using underscores to make large numbers more readable e.g. 10_000_000
+Constants - use all capital letters to indicate a variable is a constant e.g. MAX_CONNECTIONS = 5000
