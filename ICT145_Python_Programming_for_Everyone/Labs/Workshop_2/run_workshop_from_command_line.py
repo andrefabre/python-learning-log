@@ -1,0 +1,81 @@
+"""
+Currency Converter: Takes AUD currency as input and converts to defined set of currencies
+and exchange rates. Displays converted currencies in table.
+    Inputs:
+        string; personName = name of user
+        float; amount = amount of currency in AUD to be converted
+
+    Calculations:
+        amount in converted currency = amount in AUD * currency exchange rate
+        
+    Output:
+        display list of currencies in table form.
+"""
+
+# Run from command line
+
+import sys
+# sys.argv is a list that contains the script name and all arugments passed to it
+
+
+# check is any arguments were passed
+if len(sys.argv) != 3:
+    print("You need to supply 3 args, <script> <name> <amount>")
+    sys.exit(1)
+
+personName = sys.argv[1].title()
+AmountAUD = float(sys.argv[2])
+print(f"Running {sys.argv[0]} Name = {sys.argv[1]} Amount = {sys.argv[2]}") # sys.srgv[0] is the script name itself
+
+
+    
+# 1. Declare list of currencies as dict
+currencies = {"BDT": ("Bangladeshi Taka", 75.1),
+              "CAD": ("Canadian Dollar", 0.89),
+              "CNY": ("Chinese Yaun", 4.46),
+              "EUR": ("Euro", 0.60),
+              "HKD": ("Hong Kong Dollar", 4.84),
+              "INR": ("Indian Rupee", 54.44),
+              "JPY": ("Japanese Yen", 95.83),
+              "NZD": ("New Zealand Dollar", 1.10),
+              "SGD": ("Singapore Dollar", 0.85),
+              "USD": ("United States Dollar", 0.62)
+             }
+
+# 1. Display welcome message
+print("Welcome to Currency Converter!")
+
+# 2. Get persons name and print to screen
+#personName = input("Please enter your name: ").title()
+print(f"\nHi {personName}!,\n")
+
+amountAUD = 0
+while (amountAUD <= 0):
+# 3. Get amount in AUD
+    try:
+        print("Please enter the amount (in AUD) you want to convert: ")
+        amountAUD = float(sys.argv[2].title())
+        if amountAUD <= 0:
+            print(f"\nYou entered ${amountAUD:,.2f} AUD, amount must be greater than 0.\n")
+            continue
+    except ValueError:
+        print(f"\nPlease enter a valid number.\n")
+        continue
+
+    # 4. Display table headings
+    print(f"\nHey {personName}!,\n\nPlease see below the ${amountAUD:,.2f} AUD converted in different currencies!")
+    print("\nCurrency\t\tExchange Rate\t\tAustralian Dollars\tAmount")
+    print("\t\t\t\t\t\tto be converted\t\t(in given currency)\n")
+
+    for key, values in currencies.items():
+        convertedCurrency = amountAUD * values[1]
+        # format number of tabs
+        if key in ["CAD", "CNY", "INR", "JPY"]:
+            tabs = "\t\t"
+        elif key == "EUR":
+            tabs = "\t\t\t"
+        else:
+            tabs = "\t"
+                
+        print(f"{values[0]}{tabs}1 AUD = {values[1]:.2f} {key}\t${amountAUD:,.2f} AUD\t\t{convertedCurrency:,.2f} {key}")    
+    
