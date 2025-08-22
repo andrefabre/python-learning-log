@@ -65,15 +65,10 @@ def decide_winner(player_choice, computer_choice):
     """Decides winner from Rock, Paper, Scissors single game
     tie game = 0, player win = 1, computer win = 2"""
     
-    if player_choice == 'rock' and computer_choice == "paper":
-        return 2
-    elif player_choice == 'rock' and computer_choice == "scissors":
+    pc, cc = player_choice, computer_choice
+    if  pc == 'rock' and cc == "scissors" or pc == "paper" and cc == "rock" or pc == "scissors" and cc == "paper":
         return 1
-    elif player_choice == "paper" and computer_choice == "rock":
-        return 1
-    elif player_choice == "paper" and computer_choice == "scissors":
-        return 2
-    elif player_choice == "scissors" and computer_choice == "rock":
+    elif cc == 'rock' and pc == "scissors" or cc == "paper" and pc == "rock" or cc == "scissors" and pc == "paper" :
         return 2
     else:
         return 0
@@ -116,11 +111,13 @@ def play_game(player_name, num_rounds):
             if  choice == "Thanks for playing!":
                 print(f"\n{choice}")
                 break
-            elif choice == "invalid choice":
+            elif choice == "invalid choice" or None:
+                print(f"\n{GREEN_TEXT_START}Please enter rock, paper or scissors:{END_TEXT_COLOR} ")
                 continue
             else:
                 print(f"\n{choice}")
         else:
+            print(f"\n{GREEN_TEXT_START}Please enter rock, paper or scissors:{END_TEXT_COLOR} ")
             continue
         # Get and display computer choice
         computer_choice = get_computer_choice()
@@ -153,7 +150,7 @@ def play_game(player_name, num_rounds):
         round_count += 1
         
     if player_wins == round_break or player_wins > player_losses:
-        game_winner = "{player_name} WON!"
+        game_winner = f"{player_name} WON!"
     elif player_losses == round_break or player_losses > player_wins:
         game_winner = "Computer WON!"
     else:

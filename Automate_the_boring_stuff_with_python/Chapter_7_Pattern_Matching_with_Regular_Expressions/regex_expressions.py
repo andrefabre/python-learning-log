@@ -96,5 +96,52 @@ mo3.group() # 'Batwowowowowoman'
 
 # Matching 1 or more with the Plus
 # The '+' means match zero or more
+# The group preceding a plus must appear at least once
 
+batRegex = re.compile(r"Bat(wo)+man")
+mo1 = batRegex.search("The Adventures of Batwoman")
+mo1.group() # "Batwoman"
 
+mo2 = batRegex.search("The Adventures of Batwowowowoman")
+mo2.group() # 'Batwowowowoman'
+
+mo3 = batRegex.search("The Adventures of Batman")
+mo3 == None # True
+
+# Matching specific Repetitions with Braces
+# If you have a group that you want to repeat a specific number of times, follow
+# the group in your regex with a number in braces.
+# For example, the regex (Ha){3} will match the string "HaHaHa" but it will not
+# match "HaHa"
+# Instead of one number, you can specify a range by writing a minimum, a comma,
+# and a maximum in between braces
+# Ha{3, 5} will match "Hahaha", "HaHaHaHa" and "HaHaHaHaHa"
+
+# Greedy and Non-greedy Matching
+# Python's regular expressions are greedy by default, which means that in
+# ambiguous situations they will match the longest string possible
+
+greedyHaRegex = re.compile(r"Ha){3, 5}")
+mo1 = greedyHaRegex.search("HaHaHaHaHa")
+mo1.group() # "HaHaHaHaHa"
+
+nongreedyHaRegex = re.compile(r"Ha){3, 5}?")
+mo2 = nongreedyHaRegex.search("HaHaHaHaHa")
+mo2.group() # "HaHaHa"
+
+# NOTE: The ? can have two meanings in regular expressions: declaring a non-greedy
+# match or flagging an optional group. These meanings are entirely unrelated
+
+# The Findall() method
+# The findall() method will return thea list of strings of every match in the searched
+# string - as long as there are no groups in the regular expression
+
+phoneNumRegex = re.compile(r"\d\d\d-\d\d\d-\d\d\d\d") # has no groups
+phoneNumRegex.findall("Cell: 415-555-9999 Work: 212-555-0000") # ['415-555-9999', '212-555-0000']
+
+# if there ARE groups in the regular expression, then findall() will return a list
+# of tuples. Each tuple represents a found match, and its items are matched strings
+# for each group in the regex
+
+phoneNumRegex = re.compile(r"(\d\d\d)-(\d\d\d)-(\d\d\d\d)") # has groups
+phoneNumRegex.findall("Cell: 415-555-9999 Work: 212-555-0000") # [('415', '555', '9999'), ('212', '555', '0000')]
