@@ -10,8 +10,8 @@ def main():
     player_name = rps.get_name().title()
     rps.greeting(player_name)
     
-    # Play Game anre set number of rounds
-    num_rounds = 7
+    # Play Game and set number of rounds
+    num_rounds = int(input("How many rounds would you like to play?: "))
     rps.play_game(player_name, num_rounds)
     
     # Play again

@@ -83,12 +83,6 @@ def game_score_computer(wins, losses, ties):
 
 def play_game(player_name, num_rounds):
     
-    # Variables
-    round_count = 1 # counter for number of rounds
-    total_rounds = num_rounds # number of rounds per game
-    round_break = total_rounds // 2 + 1 # short circuit round if win, loss or tie decided
-    player_wins, player_losses, computer_wins, computer_losses, ties = 0, 0, 0, 0, 0 # counter: wins, losses and ties
-    
     # Constants
     PERSON_EMOJI = "\U0001F9D1"
     COMPUTER_EMOJI = "\U0001F4BB"
@@ -96,7 +90,12 @@ def play_game(player_name, num_rounds):
     BLUE_TEXT_START = "\033[34m"
     END_TEXT_COLOR = "\033[0m"
     GREEN_TEXT_START = "\033[32m"
-   
+    
+    # Variables
+    round_count = 1 # counter for number of rounds
+    total_rounds = num_rounds # number of rounds per game
+    round_break = total_rounds // 2 + 1 # short circuit round if win, loss or tie decided
+    player_wins, player_losses, computer_wins, computer_losses, ties = 0, 0, 0, 0, 0 # counter: wins, losses and ties
     
     while round_count <= total_rounds:
     
@@ -111,7 +110,7 @@ def play_game(player_name, num_rounds):
             if  choice == "Thanks for playing!":
                 print(f"\n{choice}")
                 break
-            elif choice == "invalid choice" or None:
+            elif choice == "invalid choice":
                 print(f"\n{GREEN_TEXT_START}Please enter rock, paper or scissors:{END_TEXT_COLOR} ")
                 continue
             else:
@@ -124,6 +123,7 @@ def play_game(player_name, num_rounds):
         print(f"Computer chose: {computer_choice.title()}")
         # Decide winner
         game_result = decide_winner(player_choice, computer_choice)
+    
         if game_result == 0:
             ties += 1
             print(f"It's a tie! {PERSON_EMOJI} {COMPUTER_EMOJI}")
