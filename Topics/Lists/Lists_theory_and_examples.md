@@ -2,7 +2,7 @@
 
 ## 📖 Theory - 
 
-### Automate the Boring Stuff with Python - TextBook
+### Python Crash Course - TextBook
 
 ### Introducing **Lists**
 
