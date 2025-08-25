@@ -212,3 +212,47 @@ beginsWithHello.search("Hello, world!")
 beginsWithHello.search("He said, hello") == None
 # True
 ```
+#### Matching Newlines with the Dot character
+- The dotstar ".*" will match everything except a newline.
+- By passing re.DOTALL as the second argument to re.compile(), you can make
+  the dot character match all characters, including the newline character
+
+```python
+noNewLineRegex = re.compile(".*")
+noNewLineRegex.search("Serve the public trust.\nProtect the innocent.\nUphold the law.").group()
+#"Serve the public trust."
+
+newLineRegex = re.compile(".*", re.DOTALL)
+newLineRegex.search("Serve the public trust.\nProtext the innocent.\nUphold the law.").group()
+#"Serve the public trust.\nProtext the innocent.\nUphold the law."
+```
+#### Case-Insensitive Matching
+- To make your regex case-insensitive, you can pass re.IGNORECASE or re.I as a
+  second argument to re.compile()
+```python
+robocop = re.compile(r"robocop", re.I)
+robocop.search("Robocop is part man, part machine, all cop.").group()
+# "Robocop"
+
+robocop.search("ROBOCOP protects the innocent.").group()
+# "ROBOCOP"
+
+robocop.search("Al, why does your programming talk about robocop so much?").group()
+# "robocop"
+```
+
+#### Substituting Strings with the sub() Method
+- Regular expressions can not only find text patters but can also substitute
+  new text in place of those patterns.
+- The sub() method is passed two arguments
+  - The first argument is a string to replace any matches
+  - The second is the string for the regular expression
+  - The sub() method returns the string with the substitutions applied
+
+```python
+namesRegex = re.compile(r"Agent \w+")
+namesRegex.sub("CENSORED", "Agent Alice gave the secret documents to Agent Bob.")
+```
+#### Managing Complex Regexes
+
+#### Combining re.IGNORECASE, re.DOTALL and re.VERBOSE
