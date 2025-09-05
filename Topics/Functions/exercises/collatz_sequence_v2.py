@@ -1,31 +1,30 @@
-xCheck = "❌"
 
-def collatz(number):
+def collatz(num):
     step = 1
-    mystring = "Collatz Sequence "
+    mystring = ""
     
-    while number != 1:
-        if number % 2 == 0:
-            print(f"Step {step}: {number}  / 2 = {number // 2}")
-            number = number // 2
-            step += 1
-            if number != 1:
-                mystring += str(number) + " -> "
-            else: 
-                mystring += str(number)
+    while num != 1:
+        if num % 2 == 0:
+            print(f"Step {step}: {num}  / 2 = {num // 2}")
+            num = num // 2
         else:
-            print(f"Step {step}: 3 * {number} + 1 = {number * 3 + 1}")
-            number = number * 3 + 1
-            step += 1
-            mystring += str(number) + " -> "
+            print(f"Step {step}: 3 * {num} + 1 = {num * 3 + 1}")
+            num = num * 3 + 1
 
-    print(mystring)
+        step += 1
+        if num != 1: mystring += str(num) + " -> "
+        else: mystring += str(num)
     
-while True:
-    number = int(input("Enter a number: "))
-    if number <= 0:
-        print("Collatz Sequence is only generated for the numbers greater that zero") 
-    else:
-       break
+    print("Collatz Sequence: " + mystring)
 
-collatz(number)
+def main():
+    while True:
+        num = int(input("Enter a num: "))
+        if num <= 0:
+            print("Collatz Sequence is only generated for the numbers greater that zero") 
+        else:
+            break
+        
+    collatz(num)
+
+main()
