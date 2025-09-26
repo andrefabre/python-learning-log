@@ -1,0 +1,2 @@
+Testing opening and closing files
+Writing text to filesc
