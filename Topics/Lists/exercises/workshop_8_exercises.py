@@ -50,3 +50,15 @@ if len(password) >= 8 and count_upper > 0 and count_digit > 0 and count_special 
 else:
     print("Invalid password")
     
+
+def validate_phone(phone):
+    return phone.startswith("0") and phone.isalnum() and len(phone) == 10
+
+phone_number = input("Enter your phone number: ")
+result = validate_phone(phone_number)
+if result:
+    print("Valid phone number")
+else:
+    print("Invalid phone number")
+    
+    
