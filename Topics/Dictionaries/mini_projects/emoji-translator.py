@@ -92,6 +92,7 @@ def text_to_emoji(emoji_dict):
     # Prompt user to enter a sentence to translate to emojis, validate input is not empty
     
     while True:
+        
         text = input("Enter a sentence to translate to emojis: ").strip()
         if text:
             break
@@ -120,6 +121,7 @@ def emoji_to_text(emoji_dict):
     
     # Validate input is not empty
     while not text:
+        
         print("Input cannot be empty. Please try again.")
         text = input("Enter a sentence to translate to text: ")
     
@@ -146,21 +148,23 @@ def add_custom_emoji(emoji_dict):
         if word:
             if word in emoji_dict:
                 print("Word already exists in the emoji dictionary. Please try again.")
+                continue
             else:
                 while True:
                     emoji = input("Enter the corresponding emoji: ").strip()
                     if emoji:
+                        # Add the custom emoji to the dictionary
+                        emoji_dict[word] = emoji
+    
+                        # Print confirmation message to console
+                        print(f"Custom emoji added: {word} -> {emoji}")
                         break
                     else:
                         print("Emoji cannot be empty. Please try again.")
+            break
         else:
             print("Word cannot be empty. Please try again.")
-    
-    # Add the custom emoji to the dictionary
-    emoji_dict[word] = emoji
-    
-    # Print confirmation message to console
-    print(f"Custom emoji added: {word} -> {emoji}")
+
 
 def view_all_emojis(emoji_dict):
     """ Displays all emojis in the emoji_dict
