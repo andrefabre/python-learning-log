@@ -88,8 +88,20 @@ def text_to_emoji(emoji_dict):
     Returns:
         None
     """
-    text = input("Enter a sentence to translate to emojis: ")
+    
+    # Prompt user to enter a sentence to translate to emojis, validate input is not empty
+    
+    while True:
+        text = input("Enter a sentence to translate to emojis: ").strip()
+        if text:
+            break
+        else:
+            print("Input cannot be empty. Please try again.")
+    
+    # Translate text to emojis
     emojis = [emoji_dict.get(word, word) for word in text.split()]
+    
+    # Display the translated emojis to console
     print(" ".join(emojis))
 
 def emoji_to_text(emoji_dict):
