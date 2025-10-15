@@ -52,7 +52,8 @@ def main():
                 add_custom_emoji(emoji_dict)
             case 4:
                 view_all_emojis(emoji_dict)
-    
+
+        choice = menu()
     # Display exit message when menu_choice == 5
     print("\nGoodbye!")
     
@@ -104,6 +105,8 @@ def text_to_emoji(emoji_dict):
     
     # Display the translated emojis to console
     print(" ".join(emojis))
+    
+    return
 
 def emoji_to_text(emoji_dict):
     """ Transalates emojis to text using the emoji_dict
