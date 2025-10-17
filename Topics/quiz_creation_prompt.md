@@ -152,6 +152,128 @@ Answer: B) ('a', 100)
 
 Explanation: The iterator over `d.items()` yields (key, value) pairs reflecting the current mapping when each item is produced. Changing the value of an existing key before consuming the iterator updates what will be yielded, so the first item shows the new value `100`. Removing/adding keys during iteration can raise runtime issues, but updating a value is permitted and is reflected in the iterator.
 
+### Section 3: items() method (Expert)
+
+Question:
+```python
+d = {'a': 1}
+items_view = d.items()
+d['b'] = 2
+print(list(items_view))
+```
+
+Choices:
+A) `[('a', 1)]`  
+B) `[('a', 1), ('b', 2)]`  
+C) `dict_items([('a', 1), ('b', 2)])`  
+D) Raises RuntimeError
+
+Answer: B) `[('a', 1), ('b', 2)]`
+
+Explanation: `dict.items()` returns a dynamic view that reflects changes to the mapping. Appending a new key `b` after creating the view will be visible when the view is converted to a list, so the result includes both pairs.
+
+### Section 3: items() method (Wrap-up)
+
+Question:
+Which of the following statements about `dict.items()` is FALSE?
+
+A) It's a dynamic view that reflects changes to the dictionary.  
+B) It returns tuples of (key, value) that are directly mutable.  
+C) Converting to `list(d.items())` gives a snapshot list of pairs.  
+D) Iterators over `d.items()` reflect updates to existing values.
+
+Answer: B) It returns tuples of (key, value) that are directly mutable.
+
+Explanation: `dict.items()` yields tuples `(key, value)` which are immutable as tuples. While the values themselves may be mutable objects (like lists) and can be modified, the tuple container returned for each item is not directly mutable.
+
+### Section 4: get() method (Easy)
+
+Question:
+```python
+d = {'a': 1, 'b': 2}
+print(d.get('c'))
+```
+
+Choices:
+A) 0  
+B) None  
+C) Raises KeyError  
+D) '' (empty string)
+
+Answer: B) None
+
+Explanation: `dict.get(key)` returns `None` if the key is missing and no default is provided. It does not raise KeyError; that's the behavior of `d[key]`.
+
+### Section 4: get() method (Medium)
+
+Question:
+```python
+d = {'a': 1}
+print(d.get('b', 0))
+```
+
+Choices:
+A) None  
+B) 0  
+C) Raises KeyError  
+D) 'b'
+
+Answer: B) 0
+
+Explanation: When a default is provided to `dict.get(key, default)`, that default is returned if the key is missing. Here the default is `0`, so `d.get('b', 0)` returns `0`.
+
+### Section 4: get() method (Hard)
+
+Question:
+```python
+d = {'a': None}
+print(d.get('a', 5))
+```
+
+Choices:
+A) None  
+B) 5  
+C) Raises KeyError  
+D) 0
+
+Answer: A) None
+
+Explanation: `dict.get(key, default)` returns the value associated with `key` if it exists, even if that value is `None`. The default is only used when the key is absent; since `'a'` exists and its value is `None`, `get` returns `None`.
+
+### Section 4: get() method (Hardest)
+
+Question:
+```python
+d = {'a': 1}
+gv = d.get
+d.clear()
+print(gv('a', 'missing'))
+```
+
+Choices:
+A) 1  
+B) 'missing'  
+C) Raises KeyError  
+D) None
+
+Answer: B) 'missing'
+
+Explanation: `gv = d.get` binds the get method to the dictionary object. After `d.clear()` the dictionary is empty, so calling the bound method `gv('a', 'missing')` returns the provided default `'missing'`. The bound method still operates on the same (now cleared) dictionary.
+
+### Section 4: get() method (Wrap-up)
+
+Question:
+Which of the following is TRUE about `dict.get()`?
+
+A) It raises KeyError when the key is absent.  
+B) The default argument is ignored if the key exists, even if the value is None.  
+C) Binding `gv = d.get` causes the method to always return the original value even after the dict changes.  
+D) `d.get('k', default)` will modify the dictionary by inserting the key if missing.
+
+Answer: B) The default argument is ignored if the key exists, even if the value is None.
+
+Explanation: `dict.get(key, default)` returns the existing value for `key` when present—even if that value is `None`—so the default is only used when the key is absent. `get` does not raise KeyError, does not insert keys, and a bound method reflects the dict's current state (it doesn't freeze the original value).
+
 ### Section 3: items() method (Medium)
 
 Question:
