@@ -39,46 +39,53 @@ def main():
     }
 
     # Display menu in console and get user choice
-    choice = menu()
-    
-    while choice != 5:
+    menu_choice = menu()
 
-        match choice:
+    while menu_choice != 5:
+
+        match menu_choice:
             case 1:
+                # Translate text to emojis
                 text_to_emoji(emoji_dict)
             case 2:
+                # Translate emojis to text
                 emoji_to_text(emoji_dict)
             case 3:
+                # Add a custom emoji to the dictionary
                 add_custom_emoji(emoji_dict)
             case 4:
+                # View all emojis in the dictionary
                 view_all_emojis(emoji_dict)
 
-        choice = menu()
-    # Display exit message when menu_choice == 5
+        menu_choice = menu()
+        
+    # Display exit message to console when menu_choice == 5
     print("\nGoodbye!")
     
 def menu():
-    """ Displays the menu and gets user menu choice
-    Valid choices are int between 1 and 5
-    If input == invalid choice, prompt user to try again.entered between 1 and 5
+    """ Displays the menu and gets user menu choice.
+    Valid choices are int between 1 and 5.
+    If input == invalid choice, prompt user to try again.
     
     Returns:
         menu_choice (int): user menu choice
     """
-    print("\nEmoji Translator Menu")
-    print("1. Translate text to emojis")
-    print("2. Translate emojis to text")
-    print("3. Add a custom emoji")
-    print("4. View all emojis")
-    print("5. Exit")
+    print("""
+--- Emoji Translator Menu ---
+1. Translate text to emojis
+2. Translate emojis to text
+3. Add a custom emoji
+4. View all emojis
+5. Exit
+-----------------------------""")
 
     while True:
         try:
-            menu_choice = int(input("Enter your choice (1-5): "))
+            menu_choice = int(input("Choose an option: "))
             if menu_choice in [1, 2, 3, 4, 5]:
                 return menu_choice
             else:
-                print("Invalid choice. Please enter a number between 1 and 5.")
+                print("Invalid option. Please try again.")
         except ValueError:
             print("Invalid input. Please enter a valid number between 1 and 5.")
 
@@ -143,7 +150,7 @@ def add_custom_emoji(emoji_dict):
         None
     """
     
-    # Prompt user to enter a word, validate input is not empty and not a duplicate
+    # Prompt user to enter a word; validate input is not empty and not a duplicate
     
     while True:
         
