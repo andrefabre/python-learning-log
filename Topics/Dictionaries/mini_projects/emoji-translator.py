@@ -60,7 +60,7 @@ def main():
         menu_choice = menu()
         
     # Display exit message to console when menu_choice == 5
-    print("\nGoodbye!")
+    print("\nThanks for using Emoji Translator. Goodbye! 😊")
     
 def menu():
     """ Displays the menu and gets user menu choice.
@@ -90,8 +90,8 @@ def menu():
             print("Invalid input. Please enter a valid number between 1 and 5.")
 
 def text_to_emoji(emoji_dict):
-    """ Translates text to emojis using the emoji_dict
-    Prompts user to enter a sentence to translate to emojis
+    """ Translates text to emojis using the emoji_dict.
+    Prompts user to enter a sentence to translate to emojis.
     
     Returns:
         None
@@ -101,7 +101,7 @@ def text_to_emoji(emoji_dict):
     
     while True:
         
-        text = input("Enter a sentence to translate to emojis: ").strip()
+        text = input("Enter a sentence: ").strip()
         if text:
             break
         else:
@@ -111,13 +111,12 @@ def text_to_emoji(emoji_dict):
     emojis = [emoji_dict.get(word, word) for word in text.split()]
     
     # Display the translated emojis to console
-    print(" ".join(emojis))
+    print("\nTranslated:", " ".join(emojis))
     
-    return
 
 def emoji_to_text(emoji_dict):
-    """ Transalates emojis to text using the emoji_dict
-    Prompts user to enter a sentence to translate to text
+    """ Translates emojis to text using the emoji_dict.
+    Prompts user to enter a sentence to translate to text.
     
     Returns:
         None
@@ -127,34 +126,33 @@ def emoji_to_text(emoji_dict):
     emoji_dict_reversed = {v: k for k, v in emoji_dict.items()}
     
     # Prompt user to enter a sentence to translate to text
-    text = input("Enter a sentence to translate to text: ")
+    text = input("Enter emojis: ")
     
     # Validate input is not empty
     while not text:
         
         print("Input cannot be empty. Please try again.")
-        text = input("Enter a sentence to translate to text: ")
+        text = input("Enter emojis: ")
     
     # Translate emojis to text
     words = text.split()
     translated = [emoji_dict_reversed.get(word, word) for word in words]
 
     # Display the translated text to console
-    print(" ".join(translated))
+    print("\nText:", " ".join(translated))
 
 def add_custom_emoji(emoji_dict):
-    """ Adds a custom emoji to the emoji_dict
+    """ Adds a custom emoji to the emoji_dict.
     Prompts user to enter a word and its corresponding emoji
-        to add to the emoji dictionary
+        to add to the emoji dictionary.
     Returns:
         None
     """
     
     # Prompt user to enter a word; validate input is not empty and not a duplicate
-    
     while True:
         
-        word = input("Enter a word to add: ").strip().lower()
+        word = input("Enter a new word: ").strip().lower()
         if word:
             if word in emoji_dict:
                 print("Word already exists in the emoji dictionary. Please try again.")
@@ -163,6 +161,7 @@ def add_custom_emoji(emoji_dict):
                 while True:
                     emoji = input("Enter the corresponding emoji: ").strip()
                     if emoji:
+                        
                         # Add the custom emoji to the dictionary
                         emoji_dict[word] = emoji
     
@@ -184,7 +183,7 @@ def view_all_emojis(emoji_dict):
     if not emoji_dict:
         print("No emojis found.")
     else:
-        print("All Emojis:")
+        print("Current Emoji Mappings:")
         for word, emoji in emoji_dict.items():
             print(f"{word}: {emoji}")
     
