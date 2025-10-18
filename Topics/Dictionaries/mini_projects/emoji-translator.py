@@ -1,8 +1,8 @@
 """
-# Purpose: Workhop 9 - Mini Project - Movie Watchlist
+# Purpose: Workhop 10 - Mini Project - Emoji Translator
 # Group Name: External Group - 14
 # Author/s: Andre Fabre
-# Copyright: 10 October 2025
+# Copyright: 18 October 2025
 
 Program Description:
 
@@ -10,7 +10,7 @@ Create a Python-based Emoji Translator application that allows users to translat
 Users can also add their own customer emoji mappings during runtime
 
 Requirements: You must build a console-based menu-driven program offering the
-following features. Create fuctions for each feature and menu
+following features.
 
 Functions:
     - menu(): Displays the menu and gets user menu choice
@@ -36,6 +36,8 @@ def main():
         "moon": "🌙",
         "car": "🚗",
         "bike": "🚲",
+        # "apple": "🍎",
+        # "banana": "🍌",
     }
 
     # Display menu in console and get user choice
@@ -72,16 +74,16 @@ def menu():
     """
     print("""
 --- Emoji Translator Menu ---
-1. Translate text to emojis
-2. Translate emojis to text
-3. Add a custom emoji
-4. View all emojis
+1. Text to Emoji
+2. Emoji to Text
+3. Add a Custom Emoji
+4. View All Emojis
 5. Exit
 -----------------------------""")
 
     while True:
         try:
-            menu_choice = int(input("Choose an option: "))
+            menu_choice = int(input("\nChoose an option: "))
             if menu_choice in [1, 2, 3, 4, 5]:
                 return menu_choice
             else:
@@ -166,7 +168,7 @@ def add_custom_emoji(emoji_dict):
                         emoji_dict[word] = emoji
     
                         # Print confirmation message to console
-                        print(f"Custom emoji added: {word} -> {emoji}")
+                        print(f"\nAdded: '{word}' -> {emoji}")
                         break
                     else:
                         print("Emoji cannot be empty. Please try again.")
@@ -180,10 +182,12 @@ def view_all_emojis(emoji_dict):
     Returns:
         None
     """
+    
+    # Validate emoji_dict IS NOT empty; print emoji-dict to console
     if not emoji_dict:
         print("No emojis found.")
     else:
-        print("Current Emoji Mappings:")
+        print("\nCurrent Emoji Mappings:")
         for word, emoji in emoji_dict.items():
             print(f"{word}: {emoji}")
     
