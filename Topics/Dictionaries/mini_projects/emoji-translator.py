@@ -7,10 +7,11 @@
 Program Description:
 
 Create a Python-based Emoji Translator application that allows users to translate plain english words or phrases into emojis, and vice versa.
-Users can also add their own customer emoji mappings during runtime
+Users can also add their own customer emoji mappings during runtime.
 
-Requirements: You must build a console-based menu-driven program offering the
-following features.
+Requirements:
+
+- You must build a console-based menu-driven program offering the following features. 
 
 Functions:
     - menu(): Displays the menu and gets user menu choice
@@ -18,7 +19,6 @@ Functions:
     - emoji_to_text(): Prompts user to enter a sentence to translate to text
     - add_custom_emoji(): Prompts user to enter a word and its corresponding emoji to add to the emoji dictionary
     - view_all_emojis(): Displays all emojis in the dictionary
-
 """
 
 def main():
@@ -41,22 +41,26 @@ def main():
     }
 
     # Display menu in console and get user choice
+    # If user choice != 5 repeatedly display menu; else exit program
     menu_choice = menu()
 
     while menu_choice != 5:
 
         match menu_choice:
             case 1:
-                # Translate text to emojis
+                # Function call; Translate text to emojis
                 text_to_emoji(emoji_dict)
+                
             case 2:
-                # Translate emojis to text
+                # Function call; Translate emojis to text
                 emoji_to_text(emoji_dict)
+                
             case 3:
-                # Add a custom emoji to the dictionary
+                # Function call; Add a custom emoji to the dictionary
                 add_custom_emoji(emoji_dict)
+                
             case 4:
-                # View all emojis in the dictionary
+                # Function call; View all emojis in the dictionary
                 view_all_emojis(emoji_dict)
 
         menu_choice = menu()
@@ -66,14 +70,14 @@ def main():
     
 def menu():
     """ Displays the menu and gets user menu choice.
-    Valid choices are int between 1 and 5.
+    Valid choice: 1 <= int(menu_choice) <= 5.
     If input == invalid choice, prompt user to try again.
     
     Returns:
         menu_choice (int): user menu choice
     """
     print("""
---- Emoji Translator Menu ---
+--- Emoji Translator ---
 1. Text to Emoji
 2. Emoji to Text
 3. Add a Custom Emoji
@@ -99,15 +103,12 @@ def text_to_emoji(emoji_dict):
         None
     """
     
-    # Prompt user to enter a sentence to translate to emojis, validate input is not empty
-    
+    # Prompt user to enter a sentence to translate to emojis, validate input is not empty string
     while True:
         
         text = input("Enter a sentence: ").strip()
-        if text:
-            break
-        else:
-            print("Input cannot be empty. Please try again.")
+        if text:break
+        else:print("Input cannot be empty. Please try again.")
     
     # Translate text to emojis
     emojis = [emoji_dict.get(word, word) for word in text.split()]
@@ -129,9 +130,9 @@ def emoji_to_text(emoji_dict):
     
     # Prompt user to enter a sentence to translate to text
     text = input("Enter emojis: ")
-    
-    # Validate input is not empty
-    while not text:
+
+    # Validate input is not empty string
+    while not text: 
         
         print("Input cannot be empty. Please try again.")
         text = input("Enter emojis: ")
@@ -151,7 +152,7 @@ def add_custom_emoji(emoji_dict):
         None
     """
     
-    # Prompt user to enter a word; validate input is not empty and not a duplicate
+    # Prompt user to enter a word; validate input is not empty string and not a duplicate
     while True:
         
         word = input("Enter a new word: ").strip().lower()
@@ -161,7 +162,7 @@ def add_custom_emoji(emoji_dict):
                 continue
             else:
                 while True:
-                    emoji = input("Enter the corresponding emoji: ").strip()
+                    emoji = input("Enter the emoji for that word: ").strip()
                     if emoji:
                         
                         # Add the custom emoji to the dictionary
@@ -183,7 +184,7 @@ def view_all_emojis(emoji_dict):
         None
     """
     
-    # Validate emoji_dict IS NOT empty; print emoji-dict to console
+    # Validate emoji_dict != {}; print emoji-dict to console
     if not emoji_dict:
         print("No emojis found.")
     else:
@@ -191,5 +192,4 @@ def view_all_emojis(emoji_dict):
         for word, emoji in emoji_dict.items():
             print(f"{word}: {emoji}")
     
-
 main()
