@@ -27,6 +27,7 @@ from pathlib import Path
 import os
 
 def main():
+    """ Main function to run the ATM simulation program. """
     
     # Load accoount records from file
     accounts_records = load_records()
@@ -38,38 +39,37 @@ def main():
     
     while True:
         if menu_choice == 2:
-            print("Thank you for using the ATM. Goodbye!")
-            # Close the accounts_records file
-            accounts_records.close()
-            return
-    # If user choice == 1, proceed to login and verify user credentials
-        if authenticate_user(accounts_records) != None:
-            card_number, pin = authenticate_user(accounts_records)
+            exit()
             break
+    # If user choice == 1, proceed to login and verify user credentials
+        authenticated = authenticate_user(accounts_records)
+        if not authenticated:
+            continue
         else:
-            menu_choice = main_menu()
+            card_number, pin = authenticated      # unpack the returned tuple
+        
+        # If login successful, display ATM menu repeatedly until user chooses to exit
+        # Get atm_menu_choice from atm_menu function
+        mask_card_number = "****" + card_number[-4:]
+        atm_menu_choice = atm_menu(mask_card_number)
+
+        while True:
+
+            if atm_menu_choice == 1:
+                check_balance(card_number, pin, accounts_records)
+            elif atm_menu_choice == 2:
+                deposit_funds(card_number, pin, accounts_records)
+                save_records(accounts_records)
+            elif atm_menu_choice == 3:
+                withdraw_funds(card_number, pin, accounts_records)
+                save_records(accounts_records)
+            else:
+                break
+            
+            atm_menu_choice = atm_menu()
+        
+        menu_choice = main_menu()
     
-    # If login successful, display ATM menu repeatedly until user chooses to exit
-    # Get atm_menu_choice from atm_menu function
-    atm_menu_choice = atm_menu()
-
-    while atm_menu_choice != 4:
-
-        if atm_menu_choice == 1:
-            check_balance(card_number, pin, accounts_records)
-        elif atm_menu_choice == 2:
-            new_deposit = deposit_funds(card_number, pin, accounts_records)
-            update_accounts_records = save_records(card_number, pin, new_deposit, accounts_records)
-        elif atm_menu_choice == 3:
-            new_withdrawal = withdraw_funds(card_number, pin, accounts_records)
-            update_accounts_records = save_records(card_number, pin, new_withdrawal, accounts_records)
-
-        atm_menu_choice = atm_menu()
-
-    print("Thank you for using the ATM. Goodbye!")
-    
-    #Close the accounts_records file
-    accounts_records.close()
     
 def main_menu():
     """ Displays the main program menu and gets user menu choice.
@@ -84,7 +84,8 @@ def main_menu():
 
 Main Menu
 1. Login with Card
-2. Exit""")
+2. Exit
+""")
     
     # Get user choice for main menu
     while True:
@@ -100,7 +101,7 @@ Main Menu
 
     return int(menu_choice)
         
-def atm_menu():
+def atm_menu(card_number):
     """ Displays atm menu and gets user menu choice.
     Valid choice: int [1, 2, 3, 4]
 
@@ -108,12 +109,13 @@ def atm_menu():
         menu_choice (int): user menu choice
     """
     # Display a 4-option interactive menu
-    print("""
-Welcome, Card Ending in ****3456
+    print(f"""
+Welcome, Card Ending in {card_number}
 1. Check Balance
 2. Deposit
 3. Withdraw
-4. Exit""")
+4. Exit
+""")
     
     while True:
         try:
@@ -139,10 +141,10 @@ def load_records():
     path = Path("accounts.csv")
     
     # if file is missing: raise IOError with message "Error accessing database. Please contact the administrator."
-    if not os.path.exists():
+    if not os.path.exists(path):
         raise IOError("Error accessing database. Please contact the administrator.")
     
-    
+    # Read file contents
     contents = path.read_text().rstrip()
     lines = contents.splitlines()
     account_data = {}
@@ -184,11 +186,11 @@ def save_records(accounts_records):
         None
     """
     # Write all the account data back to the accounts.csv file after a successful deposit or withdrawal
-    for k, v in accounts_records.items():
-        record_line = f"{k},{v['pin']},{v['balance']}\n"
-        with open("accounts.csv", "w") as file:
-            file.write(record_line)
-    
+    with open("accounts.csv", "w") as accounts_file:
+        for k, v in accounts_records.items():
+            record_line = f"{k},{v['pin']},{v['balance']}\n"
+            accounts_file.write(record_line)
+
     return None
 
 def authenticate_user(accounts_records):
@@ -214,10 +216,10 @@ def authenticate_user(accounts_records):
     else:
         print("Login failed. Exiting...")
     
-    return None
+    return False
     
 
-def check_balance(card_number, accounts_records):
+def check_balance(card_number, pin, accounts_records):
     """ Check the account balance for a given card number and PIN.
     
     Returns:
@@ -294,6 +296,18 @@ def withdraw_funds(card_number, pin, accounts_records):
     accounts_records[card_number]['balance'] = account_balance - withdrawal_amount
     new_balance = accounts_records[card_number]['balance']
     
+    # Print confirmation message with new balance to console
+    print(f"Withdrawal successful. New balance: ${new_balance:.2f}")
+    
     return new_balance
+
+def exit():
+    """ Exit the ATM simulation program.
+    
+    Returns:
+        None
+    """
+    print("Thank you for using the ATM. Goodbye!")
+    return
 
 main()
