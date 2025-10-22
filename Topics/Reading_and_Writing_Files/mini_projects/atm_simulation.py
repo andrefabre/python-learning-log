@@ -13,14 +13,15 @@ Requirements:
 - You must build a console-based menu-driven program offering the following features. 
 
 Functions:
-    - menu(): Displays the menu and gets user menu choice
-    - text_to_emoji(): Prompts user to enter a sentence to translate to emojis
-    - emoji_to_text(): Prompts user to enter a sentence to translate to text
-    - add_custom_emoji(): Prompts user to enter a word and its corresponding emoji to add to the emoji dictionary
-    - view_all_emojis(): Displays all emojis in the dictionary
+    - main_menu(): Displays the menu program and gets user menu choice
+    - atm_menu(): Displays the ATM menu and gets user menu choice
+    - load_records(): Loads account records from the CSV file
+    - save_records(): Saves updated account records to the CSV file
+    - authenticate_user(): Authenticates user credentials against loaded account records
+    - check_balance(): Checks and displays the account balance
+    - deposit_funds(): Deposits funds into the account
+    - withdraw_funds(): Withdraws funds from the account
 """
-
-
 
 from pathlib import Path
 import os
@@ -38,6 +39,8 @@ def main():
     while True:
         if menu_choice == 2:
             print("Thank you for using the ATM. Goodbye!")
+            # Close the accounts_records file
+            accounts_records.close()
             return
     # If user choice == 1, proceed to login and verify user credentials
         if authenticate_user(accounts_records) != None:
@@ -64,6 +67,9 @@ def main():
         atm_menu_choice = atm_menu()
 
     print("Thank you for using the ATM. Goodbye!")
+    
+    #Close the accounts_records file
+    accounts_records.close()
     
 def main_menu():
     """ Displays the main program menu and gets user menu choice.
@@ -94,9 +100,13 @@ Main Menu
 
     return int(menu_choice)
         
-        
 def atm_menu():
-    
+    """ Displays atm menu and gets user menu choice.
+    Valid choice: int [1, 2, 3, 4]
+
+    Returns:
+        menu_choice (int): user menu choice
+    """
     # Display a 4-option interactive menu
     print("""
 Welcome, Card Ending in ****3456
@@ -118,10 +128,13 @@ Welcome, Card Ending in ****3456
     
     return menu_choice
 
-
-
 def load_records():
-   
+    """ Loads account records from a file into a dictionary.
+    Validates data integrity and handles file access errors.
+    
+    Returns:
+        accounts_data (dict): Dictionary of account records
+    """
     # Load account records from a file
     path = Path("accounts.csv")
     
@@ -164,31 +177,26 @@ def load_records():
     # Return the account data dictionary
     return account_data
 
-
-    #     print(line)
-
-    # for k, v in account_data.items():
-    #     print(f"Card Number: {k}, PIN: {v['pin']}, Balance: {v['balance']}")
-    # Check if file exists using os.path.exists()
+def save_records(accounts_records):
+    """ Write all the account data back to the accounts.csv file after a successful deposit or withdrawal
     
-    # Validate each row has exactly 3 items
-    
-    # Convert balance to float before storing in dictionary
-    
-    # if file is missing: raise IOError with message "Error accessing database. Please contact the administrator."
-    
-    # if balance cannot be converted to float, the ValueError should be handled in the except block with message: "Corrupted entry. Skipping...."
-
-load_records()
-
-def save_records(card_number, pin, account_balance, accounts_records):
+    Returns:
+        None
+    """
     # Write all the account data back to the accounts.csv file after a successful deposit or withdrawal
+    for k, v in accounts_records.items():
+        record_line = f"{k},{v['pin']},{v['balance']}\n"
+        with open("accounts.csv", "w") as file:
+            file.write(record_line)
     
-    # Overwrite the entire file with updated values
-    pass
+    return None
 
 def authenticate_user(accounts_records):
+    """ Authentivate user by verfiying Card Number (16 digit) and PIN (4 digit)
     
+    Returns:
+        None
+    """
     # Authentivate user by verfiying Card Number (16 digit) and PIN (4 digit)
     card_number = input("Please enter your 16-digit card number: ")
     pin = input("Please enter your 4-digit PIN: ")
@@ -210,10 +218,25 @@ def authenticate_user(accounts_records):
     
 
 def check_balance(card_number, accounts_records):
+    """ Check the account balance for a given card number and PIN.
+    
+    Returns:
+        None
+    """
+    # Check card_number and pin values in accounts_records dictionary
+    if not (card_number in accounts_records and accounts_records[card_number]['pin'] == pin):
+        raise ValueError("Account not found. Invalid card number or PIN.")
+    
     # Display current account balance
-    pass
+    account_balance = accounts_records[card_number]['balance']
+    print(f"Current balance: ${account_balance:.2f}")
 
 def deposit_funds(card_number, pin, accounts_records):
+    """ Deposit funds into the account.
+    
+    Returns:
+        new_balance (float): updated account balance after deposit
+    """
     # Prompt the user for a deposit amount
     while True:
         try:
@@ -240,7 +263,11 @@ def deposit_funds(card_number, pin, accounts_records):
 
 
 def withdraw_funds(card_number, pin, accounts_records):
+    """ Withdraw funds from the account.
     
+    Returns:
+        new_balance (float): updated account balance after withdrawal
+    """
     
     # Check card_number and pin values in accounts_records dictionary
     if not (card_number in accounts_records and accounts_records[card_number]['pin'] == pin):
