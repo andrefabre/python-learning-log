@@ -22,9 +22,8 @@ and the account has a name (set by the customer) and interest rates (set by the 
 
 Functions:
     - menu(): Displays the menu and gets user menu choice
-    - savings_account(): Prompts user to enter an initial deposit amount to open a savings account
+    - create_account(): Prompts user to create an account
     - view_bank_account(): Displays the current balance and account details
-    - credit_account(): User can create a credit account and spend more money than they have.
     - make_deposit(): User can make a deposit to their account
     - make_withdrawal(): User can make a withdrawal from their account
 
@@ -47,41 +46,55 @@ def main():
     
     while menu_choice in [1, 2, 3, 4, 5, 6]:
     # If menu_choice == 6, print exit message; else print "Feature coming soon"
-        if menu_choice == 1:
+        if menu_choice == 1: # Create Savings Account
             
             print("\nFeature coming soon: Create Savings Account")
             if account_type == "":
-                account_name = savings_account()
+                account_name = create_account()
                 account_type = "Savings"
-                print(f"Congratulations{account_name.title()}, your {account_type} has been created.")
-                print(f"\nInitial balance: ${account_balance:.2f}")
-                print(f"To make a deposit, please select option 4 from the main menu.")
-            elif account_type == "Credit":
-                print("You already have a Credit Account. Cannot create Savings Account.")
+                print(f"\nCongratulations {account_name.title()}, your new {account_type} has been created.")
             else:
-                print("You already have a Savings Account.")
+                if account_type == "Savings":
+                    print("You already have a Savings Account.")
+                else:
+                    print("You already have a Credit Account. Cannot create Savings Account")
+
+            # Print account details
+            print(f"\nAccount Name: {account_name}")
+            print(f"Account Type: {account_type}")
+            print(f"Account Balance: ${account_balance:.2f}")
+            print(f"To make a deposit select option 4, to make a withdrawal, please select option 5 from the main menu.")
                 
-        elif menu_choice == 2:
+        elif menu_choice == 2: # View Bank Account
             
             print("\nFeature coming soon: View Bank Account")
             if account_type == "Savings" or account_type == "Credit":
-                view_bank_account(account_name, account_type, account_balance)
+                account_balance = view_bank_account(account_name, account_type, account_balance)
             else:
                 print("No account exists. Please create an account first.")
                 continue
-        elif menu_choice == 3:
+            
+        elif menu_choice == 3: # Create Credit Account
             
             print("\nFeature coming soon: Credit Account")
             if account_type == "":
-                account_name = credit_account()
+                account_name = create_account()
                 account_type = "Credit"
                 print(f"Credit account created for {account_name}.")
-            elif account_type == "Savings":
-                print("You already have a Savings Account. Cannot create Credit Account.")
+                print(f"Initial Credit Limit: $5000.00")
             else:
-                print("You already have a Credit Account.")
-                
-        elif menu_choice == 4:
+                if account_type == "Savings":
+                    print("You already have a Savings Account. Cannot create Credit Account.")
+                else:
+                    print("You already have a Credit Account.")
+
+            # Print Account Details
+            print(f"\nAccount Name: {account_name}")
+            print(f"Account Type: {account_type}")
+            print(f"Account Balance: ${account_balance:.2f}")
+            print(f"To make a deposit select option 4, to make a withdrawal, please select option 5 from the main menu.")
+            
+        elif menu_choice == 4: # Make Deposit
             
             print("\nFeature coming soon: Make Deposit")
             if account_type == "Savings" or account_type == "Credit":
@@ -91,7 +104,7 @@ def main():
                 print("No account exists. Please create an account first.")
                 continue
             
-        elif menu_choice == 5:
+        elif menu_choice == 5: # Make withdrawal
             print("\nFeature coming soon: Make Withdrawal")
             if account_type == "Savings" or account_type == "Credit":
                 account_balance = make_withdrawal(account_name, account_type, account_balance)
@@ -100,7 +113,7 @@ def main():
                 print("No account exists. Please create an account first.")
                 continue
             
-        elif menu_choice == 6:
+        elif menu_choice == 6: # Exit
             confirm_exit = input("\nAre you sure you want to exit? (Y/N): ").lower()
             if confirm_exit == "y":
                 break
@@ -123,31 +136,31 @@ def menu():
 ----- Main Menu -----
 1. Create Savings Account
 2. View Bank Account
-3. Credit Account
+3. Create Credit Account
 4. Make Deposit
 5. Make Withdrawal 
 6. Exit
 """)
     
     # Get user menu choice
-    menu_choice = int(input("Please enter your choice (1-6): "))
+    
     
     # Validate user menu choice
     while True:
         try:
+            menu_choice = int(input("Please enter your choice (1-6): "))
             if menu_choice < 1 or menu_choice > 6:
                 print("Invalid choice. Please enter a number between 1 and 6.")
-                menu_choice = int(input("Please enter your choice (1-6): "))
+                continue
             else:
                 break
         except ValueError:
-            print("Invalid input. Please enter a numeric value.")
-            menu_choice = int(input("Please enter your choice (1-6): "))
+            print("Invalid input. Please try again.")
     
     return menu_choice
 
-def savings_account():
-    """Creates a savings account by prompting the user for an account name.
+def create_account():
+    """Creates a bank account by prompting the user for an account name.
     
     Returns:
         account_name (str): The name of the account holder.
@@ -165,25 +178,6 @@ def savings_account():
         
     return account_name
 
-def credit_account():
-    """Creates a credit account by prompting the user for an account name.
-
-    Returns:
-        account_name (str): The name of the account holder.
-    """
-    
-    # Get account name from user and validate input, account name must be at least 5 characters long
-    account_name = input("Enter account holder's name: ")
-    
-    while True:
-        if len(account_name) < 5:
-            print("Account name must be at least 5 characters long. Please try again.")
-            account_name = input("Enter account holder's name: ")
-        else:
-            break
-
-    return account_name
-
 def view_bank_account(account_name, account_type, account_balance):
     """Takes account details as parameters, applies banking fees, and prints them to the console.
     
@@ -193,7 +187,7 @@ def view_bank_account(account_name, account_type, account_balance):
         account_balance (float): The current balance of the account.
 
     Returns:
-        None
+        end_of_month (float): The updated account balance after applying fees and interest.
     """
     # Constants
     SAVINGS_ACCT_INTEREST_RATE = 0.02  # 2% annual interest rate
@@ -227,6 +221,7 @@ Account Balance: ${end_of_month_balance:.2f}
    
     # Calculate charges and fees for Credit account and print details
     if account_type == "Credit":
+        monthly_interest = account_balance * (CREDIT_ACCT_INTEREST_RATE / 12)
         if is_overdue:
             over_charge_fee = MONTHLY_OVERCHARGE_FEE
             end_of_month_balance = account_balance - over_charge_fee
@@ -250,6 +245,8 @@ Balance after fees and interest: ${end_of_month_balance:.2f}
 
 Account Balance: ${end_of_month_balance:.2f}
 ----------------------------------------""")
+        
+    return end_of_month_balance
 
 def make_deposit(account_name, account_type, account_balance):
     """Creates a deposit to the specified account.
@@ -302,31 +299,29 @@ def make_withdrawal(account_name, account_type, account_balance):
     while True:
         try:
             withdrawal_amount = float(input("Enter withdrawal amount: $"))
-            break
+            
+            if account_type == "Savings":
+                if withdrawal_amount > account_balance:
+                    print("Insufficient funds. Please enter a lower amount.")
+                    print("You can only withdraw up to your current balance.")
+                    print(f"Your current balance is: ${account_balance:.2f}")
+                    continue
+                else:
+                    break
+            elif account_type == "Credit":
+                # Allow overdraft for credit account with a limit of $5000
+                overdraft_limit = 5000.0
+                if withdrawal_amount > (account_balance + overdraft_limit):
+                    print("Withdrawal exceeds overdraft limit. Please enter a lower amount.")
+                    print(f"You can withdraw up to: ${account_balance + overdraft_limit:.2f}")
+                    continue
+                else:
+                    break
+                
         except ValueError:
             print("Invalid input. Please enter a numeric value.")
             continue
 
-    if account_type == "Savings":
-        while True:
-            if withdrawal_amount > account_balance:
-                print("Insufficient funds. Please enter a lower amount.")
-                print("You can only withdraw up to your current balance.")
-                print(f"Your current balance is: ${account_balance:.2f}")
-                continue
-            else:
-                break
-    elif account_type == "Credit":
-        # Allow overdraft for credit account with a limit of $5000
-        overdraft_limit = 5000.0
-        while True:
-            if withdrawal_amount > (account_balance + overdraft_limit):
-                print("Withdrawal exceeds overdraft limit. Please enter a lower amount.")
-                print(f"You can withdraw up to: ${account_balance + overdraft_limit:.2f}")
-                continue
-            else:
-                break
-    
     # Calculate new account balance
     account_balance -= withdrawal_amount
     return account_balance
