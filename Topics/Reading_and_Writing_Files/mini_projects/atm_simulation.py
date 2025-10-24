@@ -66,7 +66,7 @@ def main():
             else:
                 break
             
-            atm_menu_choice = atm_menu()
+            atm_menu_choice = atm_menu(mask_card_number)
         
         menu_choice = main_menu()
     
@@ -109,6 +109,7 @@ def atm_menu(card_number):
         menu_choice (int): user menu choice
     """
     # Display a 4-option interactive menu
+    
     print(f"""
 Welcome, Card Ending in {card_number}
 1. Check Balance
@@ -138,21 +139,22 @@ def load_records():
         accounts_data (dict): Dictionary of account records
     """
     
-    # if not os.path.exists(path):
-    #     raise IOError("Error accessing database. Please contact the administrator.")
-    # # if file is missing: raise IOError with message "Error accessing database. Please contact the administrator."
-    path = "accounts.csv"
-    if not os.path.exists(path):
-            raise IOError("Error accessing database. Please contact the administrator.")
     
+    # if file is missing: raise IOError with message "Error accessing database. Please contact the administrator."
+    path = "accounts.csv"
+    
+    if not os.path.exists(path):
+        raise IOError("Error accessing database. Please contact the administrator.")
+
+    # Load account records from accounts.csv file into a dictionary
     account_data = {}
     
-    # Load account records from a file
     with open("accounts.csv", "r") as f:
         accounts_file = csv.reader(f)
         
         for line in accounts_file:
-            # Split each line by comma and strip whitespace, convert to list using list comprehension
+            
+            # convert to list using list comprehension
             values = [item.strip() for item in line]
             
             # Validate list has exactly 3 items
@@ -191,7 +193,7 @@ def save_records(accounts_records):
     #         accounts_file.write(record_line)
 
     # Write all the account data back to the accounts.csv file after a successful deposit or withdrawal
-    with open("accounts.csv", "w") as f:
+    with open("accounts.csv", "w", newline="") as f:
         accounts_file = csv.writer(f)
         for k, v in accounts_records.items():
             accounts_file.writerow([k, v['pin'], v['balance']])
