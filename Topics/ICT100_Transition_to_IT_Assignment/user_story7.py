@@ -1,34 +1,3 @@
-"""
-# Purpose: ICT100 Transition to IT Assignment 2 - Simple Banking App
-# Author/s: Andre Fabre
-# Copyright: 25 October 2025
-
-Problem Description:
-
-Develop a simple banking application, the application will allow users to simulate opening a bank account and performing various basic banking operations, as well as the bank performing automated tasks
-
-Constraints:
-- A text-based (aka console) application
-- No graphical user interface (GUI)
-- No desktop application
-- No web application
-- No mobile application
-
-Banking Domain Rules
-- A customer can only have one account, and it can be a Savings Account or a Credit Account, 
-and the account has a name (set by the customer) and interest rates (set by the bank).
-- Savings Account: Monthly Interest Added, Monthly Bank Fee, and Balance must be greater than zero
-- Credit Account: Balance can be negative up to a Credit Limit, Monthly Charge on Overdue Payment, and No Interest.
-
-Functions:
-    - menu(): Displays the menu and gets user menu choice
-    - create_account(): Prompts user to create an account
-    - view_bank_account(): Displays the current balance and account details
-    - make_deposit(): User can make a deposit to their account
-    - make_withdrawal(): User can make a withdrawal from their account
-
-"""
-
 def main():
     """Main function to run the banking application.
     """
@@ -37,7 +6,7 @@ def main():
     account_balance = 0.0 # General account balance
     account_type = "" # "Savings" or "Credit"
     account_name = "" # Name of account holder
-
+    
     # Print welcome message
     print("\nWelcome to the Simple Banking App")
     print("----------------------------------")
@@ -98,14 +67,9 @@ def main():
                 print(f"Deposit successful! New balance: ${account_balance:.2f}")
             else:
                 print("No account exists. Please create an account first.")
-            
+
         elif menu_choice == 5: # Make withdrawal
-            
-            if account_type == "Savings" or account_type == "Credit":
-                account_balance = make_withdrawal(account_name, account_type, account_balance)
-                print(f"Withdrawal successful! New balance: ${account_balance:.2f}")
-            else:
-                print("No account exists. Please create an account first.")
+            print("\nFeature coming soon: Make Withdrawal")
             
         elif menu_choice == 6: # Exit
             confirm_exit = input("\nAre you sure you want to exit? (Y/N): ").lower()
@@ -137,9 +101,6 @@ def menu():
 6. Exit
 """)
     
-    # Get user menu choice
-    
-    
     # Validate user menu choice
     while True:
         try:
@@ -153,6 +114,7 @@ def menu():
             print("Invalid input. Please try again.")
     
     return menu_choice
+
 
 def create_account():
     """Creates a bank account by prompting the user for an account name.
@@ -190,7 +152,7 @@ def view_bank_account(account_name, account_type, account_balance):
     MONTHLY_FEE = 5.00                  # $5 monthly fee for savings accounts
     MONTHLY_OVERCHARGE_FEE = 10.00        # $10 monthly fee for credit accounts
 
-    is_overdue = False  # Placeholder for overdue status
+    is_overdue = True  # Placeholder for overdue status
     
     # Calculate charges and fees for Savings account and print details
     if account_type == "Savings":
@@ -272,53 +234,6 @@ def make_deposit(account_name, account_type, account_balance):
     
     # Update account balance
     account_balance += deposit_amount
-    return account_balance
-
-
-def make_withdrawal(account_name, account_type, account_balance):
-    """Creates a withdrawal from the specified account.
-
-    Args:
-        account_name (str): The name of the account holder.
-        account_type (str): The type of the account ("Savings" or "Credit").
-        account_balance (float): The current balance of the account.
-
-    Returns:
-        float: The updated account balance after the withdrawal.
-    """
-    
-    # Print withdrawal message
-    print(f"\nMaking a withdrawal from {account_type} account for {account_name}.")
-
-    # Get withdrawal amount from user and validate input
-    while True:
-        try:
-            withdrawal_amount = float(input("Enter withdrawal amount: $"))
-            
-            if account_type == "Savings":
-                if withdrawal_amount > account_balance:
-                    print("Insufficient funds. Please enter a lower amount.")
-                    print("You can only withdraw up to your current balance.")
-                    print(f"Your current balance is: ${account_balance:.2f}")
-                    continue
-                else:
-                    break
-            elif account_type == "Credit":
-                # Allow overdraft for credit account with a limit of $5000
-                overdraft_limit = 5000.0
-                if withdrawal_amount > (account_balance + overdraft_limit):
-                    print("Withdrawal exceeds overdraft limit. Please enter a lower amount.")
-                    print(f"You can withdraw up to: ${account_balance + overdraft_limit:.2f}")
-                    continue
-                else:
-                    break
-                
-        except ValueError:
-            print("Invalid input. Please enter a numeric value.")
-            continue
-
-    # Calculate new account balance
-    account_balance -= withdrawal_amount
     return account_balance
 
 main()
