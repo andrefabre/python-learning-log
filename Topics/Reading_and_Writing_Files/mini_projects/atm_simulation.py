@@ -23,7 +23,7 @@ Functions:
     - withdraw_funds(): Withdraws funds from the account
 """
 
-from pathlib import Path
+import csv
 import os
 
 def main():
@@ -137,46 +137,45 @@ def load_records():
     Returns:
         accounts_data (dict): Dictionary of account records
     """
-    # Load account records from a file
-    path = Path("accounts.csv")
     
-    # if file is missing: raise IOError with message "Error accessing database. Please contact the administrator."
+    # if not os.path.exists(path):
+    #     raise IOError("Error accessing database. Please contact the administrator.")
+    # # if file is missing: raise IOError with message "Error accessing database. Please contact the administrator."
+    path = "accounts.csv"
     if not os.path.exists(path):
-        raise IOError("Error accessing database. Please contact the administrator.")
+            raise IOError("Error accessing database. Please contact the administrator.")
     
-    # Read file contents
-    contents = path.read_text().rstrip()
-    lines = contents.splitlines()
     account_data = {}
-
-    for line in lines:
+    
+    # Load account records from a file
+    with open("accounts.csv", "r") as f:
+        accounts_file = csv.reader(f)
         
-        # Split each line by comma and strip whitespace, convert to list using list comprehension
-        values = [item.strip() for item in line.split(",")]
-        
-        # Validate list thas exactly 3 items
-        if len(values) != 3:
-            print("Corrupted entry. Skipping....")
-            continue
-        
-        # assign values to variables by unpacking the list
-        card_number, pin, balance = values
-        
-        # check if balance can be converted to float, handle ValueError in except block with message: "Corrupted entry. Skipping...."
-        
-        try:
-            balance = float(balance)
-        except ValueError:
-            print("Corrupted entry. Skipping....")
-            continue
-
-        
-        account_data[card_number] = {
-            "pin": pin,
-            "balance": float(balance)
-        }
-        
-    # Return the account data dictionary
+        for line in accounts_file:
+            # Split each line by comma and strip whitespace, convert to list using list comprehension
+            values = [item.strip() for item in line]
+            
+            # Validate list has exactly 3 items
+            if len(values) != 3:
+                print("Corrupted entry. Skipping....")
+                continue
+            
+            # Assign values to variables by unpacking the list
+            card_number, pin, balance = values
+            
+            # check if balance value can be converted to float
+            try:
+                balance = float(balance)
+            except ValueError:
+                print("Corrupted entry. Skipping....")
+                continue
+            
+            # Assign to account_data dictionary
+            account_data[card_number] = {
+                "pin": pin,
+                "balance": float(balance),
+            }
+    
     return account_data
 
 def save_records(accounts_records):
@@ -186,10 +185,16 @@ def save_records(accounts_records):
         None
     """
     # Write all the account data back to the accounts.csv file after a successful deposit or withdrawal
-    with open("accounts.csv", "w") as accounts_file:
+    # with open("accounts.csv", "w") as accounts_file:
+    #     for k, v in accounts_records.items():
+    #         record_line = f"{k},{v['pin']},{v['balance']}\n"
+    #         accounts_file.write(record_line)
+
+    # Write all the account data back to the accounts.csv file after a successful deposit or withdrawal
+    with open("accounts.csv", "w") as f:
+        accounts_file = csv.writer(f)
         for k, v in accounts_records.items():
-            record_line = f"{k},{v['pin']},{v['balance']}\n"
-            accounts_file.write(record_line)
+            accounts_file.writerow([k, v['pin'], v['balance']])
 
     return None
 
@@ -199,7 +204,7 @@ def authenticate_user(accounts_records):
     Returns:
         None
     """
-    # Authentivate user by verfiying Card Number (16 digit) and PIN (4 digit)
+    # Authenticate user by verifying Card Number (16 digit) and PIN (4 digit)
     card_number = input("Please enter your 16-digit card number: ")
     pin = input("Please enter your 4-digit PIN: ")
     
